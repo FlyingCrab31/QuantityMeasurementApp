@@ -5,19 +5,17 @@ import com.bridgelabz.quantityMeasurementApp.generic_quantity.Quantity;
 import com.bridgelabz.quantityMeasurementApp.generic_quantity.IMeasurable;
 import com.bridgelabz.quantityMeasurementApp.generic_quantity.WeightUnit;
 import com.bridgelabz.quantityMeasurementApp.generic_quantity.LengthUnit;
+import com.bridgelabz.quantityMeasurementApp.generic_quantity.VolumeUnit;
 
 public class GenericQuantityTest {
     @Test
     void testIMeasurable_LengthUnitImplementation() {
-
-
         assertInstanceOf(IMeasurable.class, LengthUnit.FEET);
 
         assertEquals(1.0, LengthUnit.FEET.getConversionFactor());
     }
-
     @Test
-    void testIMeasurable_WeightUnitImplementation() {
+    void testIMeasurable_WeightUnitImplementation(){
 
         assertInstanceOf(IMeasurable.class, WeightUnit.KILOGRAM);
 
@@ -32,8 +30,6 @@ public class GenericQuantityTest {
 
         assertEquals(q1, q2);
     }
-
-
     @Test
     void testGenericQuantity_WeightEquality() {
 
@@ -42,13 +38,14 @@ public class GenericQuantityTest {
 
         assertEquals(q1, q2);
     }
+
+
     @Test
     void testGenericQuantity_LengthConversion() {
 
         Quantity<LengthUnit> q = new Quantity<>(1.0, LengthUnit.FEET);
 
         Quantity<LengthUnit> result = q.convertTo(LengthUnit.INCHES);
-
         assertEquals(new Quantity<>(12.0, LengthUnit.INCHES), result);
     }
 
@@ -64,12 +61,14 @@ public class GenericQuantityTest {
     void testGenericQuantity_LengthAddition() {
 
         Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+
         Quantity<LengthUnit> q2 = new Quantity<>(12.0, LengthUnit.INCHES);
 
         Quantity<LengthUnit> result = q1.add(q2, LengthUnit.FEET);
 
         assertEquals(new Quantity<>(2.0, LengthUnit.FEET), result);
     }
+
     @Test
     void testGenericQuantity_WeightAddition() {
 
@@ -90,8 +89,8 @@ public class GenericQuantityTest {
     void testCrossCategoryPrevention_Equals() {
 
         Quantity<LengthUnit> length = new Quantity<>(1.0, LengthUnit.FEET);
-
         Quantity<WeightUnit> weight = new Quantity<>(1.0, WeightUnit.KILOGRAM);
+
         assertNotEquals(length, weight);
     }
 
@@ -109,7 +108,7 @@ public class GenericQuantityTest {
     }
 
     @Test
-    void testHashCode_Consistency(){
+    void testHashCode_Consistency() {
 
 
         Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
@@ -121,10 +120,68 @@ public class GenericQuantityTest {
 
 
     @Test
-    void testImmutability(){
+    void testImmutability()
+    {
         Quantity<LengthUnit> q1 = new Quantity<>(1.0, LengthUnit.FEET);
+
         Quantity<LengthUnit> q2 = q1.convertTo(LengthUnit.INCHES);
 
         assertNotSame(q1, q2);
+    }
+    @Test
+    void testIMeasurable_VolumeUnitImplementation() {
+
+        assertInstanceOf(IMeasurable.class, VolumeUnit.LITRE);
+
+        assertEquals(1.0, VolumeUnit.LITRE.getConversionFactor());
+    }
+
+    @Test
+
+
+    void testGenericQuantity_VolumeEquality()
+    {
+
+        Quantity<VolumeUnit> q1 = new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> q2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+
+        assertEquals(q1, q2);
+    }
+
+    @Test
+
+
+    void testGenericQuantity_VolumeConversion() {
+
+        Quantity<VolumeUnit> q = new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> result = q.convertTo(VolumeUnit.MILLILITRE);
+
+        assertEquals(new Quantity<>(1000.0, VolumeUnit.MILLILITRE), result);
+    }
+
+    @Test
+
+
+    void testGenericQuantity_VolumeAddition() {
+        Quantity<VolumeUnit> q1 = new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> q2 = new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> result = q1.add(q2, VolumeUnit.LITRE);
+        assertEquals(new Quantity<>(2.0, VolumeUnit.LITRE), result);
+    }
+
+    @Test
+    void testCrossCategoryPrevention_VolumeAndLength()
+    {
+        Quantity<VolumeUnit> volume = new Quantity<>(1.0, VolumeUnit.LITRE);
+
+        Quantity<LengthUnit> length = new Quantity<>(1.0, LengthUnit.FEET);
+
+
+
+        assertNotEquals(volume, length);
     }
 }
