@@ -1,23 +1,17 @@
 package com.bridgelabz.quantityMeasurementApp.generic_quantity;
 import java.util.Objects;
 
-public class Quantity<U extends IMeasurable>{
+public final class Quantity<U extends IMeasurable> {
     private final double value;
 
     private final U unit;
 
     public Quantity(double value, U unit) {
-
-
         if (unit == null) throw new IllegalArgumentException("Unit cannot be null");
-
         if (!Double.isFinite(value)) throw new IllegalArgumentException("Value must be finite");
-
         this.value = value;
-
         this.unit = unit;
     }
-
     public double getValue() {
         return value;
     }
@@ -40,7 +34,6 @@ public class Quantity<U extends IMeasurable>{
     public Quantity<U> add(Quantity<U> other) {
         return add(other, this.unit);
     }
-
     public Quantity<U> add(Quantity<U> other, U targetUnit) {
 
         if (!unit.getClass().equals(other.unit.getClass())) throw new IllegalArgumentException("Cannot add different measurement categories");
@@ -51,7 +44,6 @@ public class Quantity<U extends IMeasurable>{
         double base2 = other.unit.convertToBaseUnit(other.value);
 
         double sumBase = base1 + base2;
-
 
         double finalValue = targetUnit.convertFromBaseUnit(sumBase);
 
@@ -91,5 +83,41 @@ public class Quantity<U extends IMeasurable>{
     private double round(double value) {
 
         return Math.round(value * 100.0) / 100.0;
+    }
+
+    public Quantity<U> subtract(Quantity<U> other) {
+        return subtract(other, this.unit);
+    }
+
+    public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
+
+        if (other == null)
+            throw new IllegalArgumentException("Quantity cannot be null");
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
+        if (!this.unit.getClass().equals(other.unit.getClass()))
+            throw new IllegalArgumentException("Cross-category operation not allowed");
+        double base1 = this.unit.convertToBaseUnit(this.value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+        double baseResult = base1 - base2;
+        double finalValue = targetUnit.convertFromBaseUnit(baseResult);
+        finalValue = Math.round(finalValue * 100.0) / 100.0;
+        return new Quantity<>(finalValue, targetUnit);
+    }
+
+    public double divide(Quantity<U> other) {
+
+        if (other == null)
+            throw new IllegalArgumentException("Quantity cannot be null");
+        if (!this.unit.getClass().equals(other.unit.getClass()))
+            throw new IllegalArgumentException("Cross-category operation not allowed");
+
+        double base1 = this.unit.convertToBaseUnit(this.value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+
+        if (base2 == 0)
+            throw new ArithmeticException("Division by zero");
+
+        return base1 / base2;
     }
 }

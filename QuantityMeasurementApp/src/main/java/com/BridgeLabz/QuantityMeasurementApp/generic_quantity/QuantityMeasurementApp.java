@@ -10,6 +10,7 @@ public class QuantityMeasurementApp {
     }
     public static <U extends IMeasurable> void demonstrateConversion(
             Quantity<U> quantity, U targetUnit) {
+
         System.out.println(quantity + " converted to " + targetUnit.getUnitName() + " = " + quantity.convertTo(targetUnit));
     }
 
@@ -25,19 +26,21 @@ public class QuantityMeasurementApp {
 
         Quantity<LengthUnit> l2 = new Quantity<>(12.0, LengthUnit.INCHES);
         demonstrateEquality(l1, l2);
-
         demonstrateConversion(l1, LengthUnit.INCHES);
-
         demonstrateAddition(l1, l2, LengthUnit.FEET);
+
         System.out.println();
 
 
         Quantity<WeightUnit> w1 = new Quantity<>(1.0, WeightUnit.KILOGRAM);
-        Quantity<WeightUnit> w2 = new Quantity<>(1000.0, WeightUnit.GRAM);
 
+        Quantity<WeightUnit> w2 = new Quantity<>(1000.0, WeightUnit.GRAM);
         demonstrateEquality(w1, w2);
+
         demonstrateConversion(w1, WeightUnit.GRAM);
+
         demonstrateAddition(w1, w2, WeightUnit.KILOGRAM);
+
 
         System.out.println();
 
@@ -47,5 +50,21 @@ public class QuantityMeasurementApp {
         demonstrateEquality(v1, v2);
         demonstrateConversion(v1, VolumeUnit.MILLILITRE);
         demonstrateAddition(v1, v2, VolumeUnit.LITRE);
+
+
+
+        Quantity<LengthUnit> length1 =
+                new Quantity<>(10.0, LengthUnit.FEET);
+
+        Quantity<LengthUnit> length2 =
+                new Quantity<>(6.0, LengthUnit.INCHES);
+
+        System.out.println("Subtraction: " +
+                length1.subtract(length2));
+
+        System.out.println("Division: " +
+                length1.divide(new Quantity<>(2.0, LengthUnit.FEET)));
+
+
     }
 }
