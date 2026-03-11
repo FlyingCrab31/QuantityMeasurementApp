@@ -1,11 +1,12 @@
 package com.bridgelabz.quantityMeasurementApp.generic_quantity;
 import java.util.Objects;
 import java.util.function.DoubleBinaryOperator;
+
+
+
 public final class  Quantity<U extends IMeasurable>
 {
-
     private final double value;
-
     private final U unit;
 
     public Quantity(double value, U unit)
@@ -15,8 +16,6 @@ public final class  Quantity<U extends IMeasurable>
 
         if (!Double.isFinite(value)) throw new IllegalArgumentException("Value must be finite");
 
-
-
         this.value = value;
         this.unit = unit;
     }
@@ -24,9 +23,6 @@ public final class  Quantity<U extends IMeasurable>
     public double getValue() {return value;}
 
     public U getUnit() {return unit;}
-
-
-
     private enum ArithmeticOperation
     {
 
@@ -50,22 +46,25 @@ public final class  Quantity<U extends IMeasurable>
 
 
     private void validateArithmeticOperands(Quantity<U> other, U targetUnit, boolean targetRequired) {
-
-
-
         if (other == null) throw new IllegalArgumentException("Quantity cannot be null");
 
         if (!this.unit.getClass().equals(other.unit.getClass())) throw new IllegalArgumentException("Cross-category operation not allowed");
 
         if (!Double.isFinite(this.value) || !Double.isFinite(other.value)) throw new IllegalArgumentException("Values must be finite");
 
+        if (!this.unit.supportsArithmetic()) throw new UnsupportedOperationException("Arithmetic not supported for " + unit.getUnitName());
+
         if (targetRequired && targetUnit == null) throw new IllegalArgumentException("Target unit cannot be null");
+
     }
 
 
 
     private double performBaseArithmetic(Quantity<U> other, ArithmeticOperation operation)
     {
+
+
+
         double base1 = this.unit.convertToBaseUnit(this.value);
         double base2 = other.unit.convertToBaseUnit(other.value);
         return operation.compute(base1, base2);
@@ -86,6 +85,8 @@ public final class  Quantity<U extends IMeasurable>
 
 
     public Quantity<U> subtract(Quantity<U> other) {return subtract(other, this.unit);}
+
+
     public Quantity<U> subtract(Quantity<U> other, U targetUnit)
 
     {
@@ -95,9 +96,12 @@ public final class  Quantity<U extends IMeasurable>
         double finalValue = targetUnit.convertFromBaseUnit(baseResult);
         return new Quantity<>(round(finalValue), targetUnit);
     }
+
+
+
+
+
     public double divide(Quantity<U> other) {
-
-
         validateArithmeticOperands(other, null, false);
         return performBaseArithmetic(other, ArithmeticOperation.DIVIDE);
     }
@@ -108,11 +112,17 @@ public final class  Quantity<U extends IMeasurable>
     {
 
         if (!unit.getClass().equals(targetUnit.getClass())) throw new IllegalArgumentException("Cannot convert between different measurement categories");
+
+
+
         double baseValue = unit.convertToBaseUnit(value);
         double convertedValue = targetUnit.convertFromBaseUnit(baseValue);
 
         return new Quantity<>(round(convertedValue), targetUnit);
     }
+
+
+
     @Override
 
 
@@ -127,6 +137,9 @@ public final class  Quantity<U extends IMeasurable>
 
 
         double base2 = that.unit.convertToBaseUnit(that.value);
+
+
+
         return Double.compare(round(base1), round(base2)) == 0;
     }
 
@@ -138,8 +151,6 @@ public final class  Quantity<U extends IMeasurable>
     }
 
     @Override
-
-
     public String toString() {return "Quantity(" + value + ", " + unit.getUnitName() + ")";}
 
 
