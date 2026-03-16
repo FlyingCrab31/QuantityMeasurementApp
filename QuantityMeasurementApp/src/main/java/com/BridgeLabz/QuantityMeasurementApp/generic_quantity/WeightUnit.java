@@ -1,9 +1,9 @@
 package com.bridgelabz.quantityMeasurementApp.generic_quantity;
 
 public enum WeightUnit implements IMeasurable{
-    KILOGRAM(1.0),
+    KILOGRAM(1000),
 
-    GRAM(0.001),
+    GRAM(1),
 
     TONNE(1000.0);
 
@@ -20,5 +20,9 @@ public enum WeightUnit implements IMeasurable{
     public String getUnitName() {
 
         return name();
+    }
+    @Override
+    public String getMeasurementType() {
+        return "WEIGHT";
     }
 }
