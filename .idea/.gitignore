@@ -1,10 +1,33 @@
-# Default ignored files
+# =========================
+# Maven
+# =========================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+
+# =========================
+# IDE - IntelliJ
+# =========================
+.idea/
+*.iml
 /shelf/
 /workspace.xml
-# Ignored default folder with query files
 /queries/
-# Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-# Editor-based HTTP Client requests
 /httpRequests/
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+application-local.properties
